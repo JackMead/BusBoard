@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace BusBoard.ConsoleApp
 {
-    class StopPointsResponseWrapper
+    class StopPointsResponse
     {
-        public List<StopPoint> StopPoints { get; set; }        
+        public List<StopPoint> StopPoints { get; set; }
     }
 }

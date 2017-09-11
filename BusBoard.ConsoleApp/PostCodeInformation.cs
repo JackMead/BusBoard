@@ -13,12 +13,6 @@ namespace BusBoard.ConsoleApp
 
         public decimal longitude;
         public decimal latitude;
-
-        public PostCodeInformation(string postCode, decimal longitude, decimal latitude)
-        {
-            this.postCode = postCode;
-            this.longitude = longitude;
-            this.latitude = latitude;
-        }
+        
     }
 }

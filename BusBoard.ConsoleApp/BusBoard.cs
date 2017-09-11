@@ -14,13 +14,12 @@ namespace BusBoard.ConsoleApp
         {
             var postCode = PromptUserForPostcode();
 
-            var rawPostCodeContent = GetPostCodeInformation(postCode);
-            var postCodeInfo = JsonConvert.DeserializeObject<PostCodeResponse>(rawPostCodeContent).result;
-            
-            var stopPoints= GetStopPointsFromPostCodeInfo(postCodeInfo);
-            //TODO
-            //stopPoints = (StopPointsResponseWrapper) stopPoints.StopPoints.OrderBy(s => s.Distance);
-            DisplayNextFiveArrivalsForStopId(stopPoints.StopPoints[0].NaptanId);
+            var postCodeResponse = GetPostCodeInformation(postCode);
+            Console.WriteLine(postCodeResponse.result.postCode);
+
+            var stopPoints= GetStopPointsFromPostCodeInfo(postCodeResponse.result);
+            var listOfStopPointsByDistance = stopPoints.StopPoints.OrderBy(s => s.Distance).ToList();
+            DisplayNextFiveArrivalsForStopId(listOfStopPointsByDistance[0].NaptanId);
         }
 
         private string PromptUserForPostcode()
@@ -39,39 +38,49 @@ namespace BusBoard.ConsoleApp
 
         private bool isValidPostcode(string userPostCode)
         {
+            if (userPostCode == "")
+            {
+                return false;
+            }
             return true;
         }
 
         private void DisplayNextFiveArrivalsForStopId(string stopID)
         {
-            var rawTFLContent = GetArrivalInformation(stopID);
+            var allArrivals = GetArrivalInformation(stopID);
+            
 
-            var allArrivals = JsonConvert.DeserializeObject<List<ArrivalInformation>>(rawTFLContent);
-
+            Console.WriteLine("Bus #:\t\t Arriving in:");
             foreach (var arrival in allArrivals.OrderBy(a => a.timeToStation).Take(5))
             {
-                Console.WriteLine(arrival.lineName + " " + arrival.timeToStation);
+                Console.WriteLine(arrival.lineName + "\t\t" + Math.Ceiling((decimal) arrival.timeToStation/60)+" mins");
             }
         }
 
-        private StopPointsResponseWrapper GetStopPointsFromPostCodeInfo(PostCodeInformation postcode)
+        private StopPointsResponse GetStopPointsFromPostCodeInfo(PostCodeInformation postcode)
         {
             var client = "https://api.tfl.gov.uk";
             var request = "StopPoint?stopTypes=NaptanPublicBusCoachTram&lon=" + postcode.longitude + "&lat=" + postcode.latitude + "&radius=300";
             return GetAPIResultStopPointWrapper(client, request);
         }
 
-        private string GetArrivalInformation(string stopID)
+        private List<ArrivalInformation> GetArrivalInformation(string stopID)
         {
             var client = "https://api-radon.tfl.gov.uk";
             var arrivalRequest = "StopPoint/" + stopID + "/Arrivals";
 
-            return GetAPIResult(client, arrivalRequest);
+            return GetAPIResults<List<ArrivalInformation>>(client, arrivalRequest);
         }
 
-        private string GetPostCodeInformation(string postCode)
+        private PostCodeResponse GetPostCodeInformation(string postCode)
         {
-            return GetAPIResult("https://api.postcodes.io", "postcodes/" + postCode);
+            string url = "https://api.postcodes.io";
+            string requestString = "postcodes/" + postCode;
+            //return GetAPIResults<PostCodeResponse>(url, request);
+            var client = new RestClient(url);
+            var request = new RestRequest(requestString, Method.GET);
+            return  client.Execute<PostCodeResponse>(request).Data;
+            //return JsonConvert.DeserializeObject<PostCodeResponse>(response.Content);
         }
 
         private string GetAPIResult(string url, string requestString)
@@ -81,17 +90,21 @@ namespace BusBoard.ConsoleApp
 
             IRestResponse response = client.Execute(request);
             return response.Content;
-
         }
 
-        private StopPointsResponseWrapper GetAPIResultStopPointWrapper(string url, string requestString)
+        private StopPointsResponse GetAPIResultStopPointWrapper(string url, string requestString)
         {
             var client = new RestClient(url);
             var request = new RestRequest(requestString, Method.GET);
 
-            return client.Execute<StopPointsResponseWrapper>(request).Data;
-            
+            return client.Execute<StopPointsResponse>(request).Data;
+        }
 
+        private T GetAPIResults<T>(string url, string requestString) where T : new()
+        {
+            var client = new RestClient(url);
+            var request = new RestRequest(requestString, Method.GET);
+            return client.Execute<T>(request).Data;
         }
     }
 }

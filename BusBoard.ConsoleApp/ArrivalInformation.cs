@@ -12,12 +12,6 @@ namespace BusBoard.ConsoleApp
         public string lineName;
         public int timeToStation;
 
-        public ArrivalInformation(string id, string name, int timeToArrive)
-        {
-            lineId = id;
-            lineName = name;
-            timeToStation = timeToArrive;
-        }
 
 
     }

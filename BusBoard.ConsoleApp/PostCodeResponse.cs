@@ -8,13 +8,8 @@ namespace BusBoard.ConsoleApp
 {
     class PostCodeResponse
     {
-        public int status;
-        public PostCodeInformation result;
-
-        public PostCodeResponse(int status, PostCodeInformation result)
-        {
-            this.status = status;
-            this.result = result;
-        }
+        public int status { get; set; }
+        public PostCodeInformation result { get; set; }
+        
     }
 }
