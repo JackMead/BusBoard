@@ -1,14 +1,11 @@
-﻿using Newtonsoft.Json;
-using RestSharp;
+﻿using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusBoard.Api
 {
-    class BusBoard
+    public class BusFinder
     {
         public void Setup()
         {
@@ -18,7 +15,7 @@ namespace BusBoard.Api
 
             var stopPoints = GetStopPointsFromPostCodeInfo(postCodeResponse.result);
             var listOfStopPointsByDistance = stopPoints.StopPoints.OrderBy(s => s.Distance).ToList();
-            DisplayNextFiveArrivalsForStopId(listOfStopPointsByDistance[0].NaptanId);
+            ReturnAllArrivalsForStopId(listOfStopPointsByDistance[0].NaptanId);
 
         }
 
@@ -45,19 +42,15 @@ namespace BusBoard.Api
             return true;
         }
 
-        private void DisplayNextFiveArrivalsForStopId(string stopID)
+        public List<ArrivalInformation> ReturnAllArrivalsForStopId(string stopID)
         {
             var allArrivals = GetArrivalInformation(stopID);
 
-
-            Console.WriteLine("Bus #:\t\t Arriving in:");
-            foreach (var arrival in allArrivals.OrderBy(a => a.TimeToStation).Take(5))
-            {
-                Console.WriteLine(arrival.LineName + "\t\t" + Math.Ceiling((decimal)arrival.TimeToStation / 60) + " mins");
-            }
+            //return allArrivals.OrderBy(a => a.TimeToStation).ToList();
+            return allArrivals;
         }
 
-        private StopPointsResponse GetStopPointsFromPostCodeInfo(PostCodeInformation postcode)
+        public StopPointsResponse GetStopPointsFromPostCodeInfo(PostCodeInformation postcode)
         {
             var client = "https://api.tfl.gov.uk";
             var request = "StopPoint?stopTypes=NaptanPublicBusCoachTram&lon=" + postcode.Longitude + "&lat=" + postcode.Latitude + "&radius=300";
@@ -72,7 +65,7 @@ namespace BusBoard.Api
             return GetAPIResults<List<ArrivalInformation>>(client, arrivalRequest);
         }
 
-        private PostCodeResponse GetPostCodeInformation(string postCode)
+        public PostCodeResponse GetPostCodeInformation(string postCode)
         {
             string url = "https://api.postcodes.io";
             string requestString = "postcodes/" + postCode;

@@ -7,4 +7,10 @@
 
 <div class="row">
     <p>You entered postcode @Model.PostCode</p>
+    <p>The closest stop point is : @Model.StopCode</p>
+    @foreach( var arrival in Model.AllArrivals)
+    {
+        @:<p> @arrival.LineName  </p>
+    }
+
 </div>
