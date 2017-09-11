@@ -9,10 +9,10 @@ namespace BusBoard.ConsoleApp
 {
     class PostCodeInformation
     {
-        public string postCode;
-
-        public decimal longitude;
-        public decimal latitude;
+        public string PostCode { get; set; }
+        public decimal Longitude { get; set; }
+        public decimal Latitude { get; set; }
         
+
     }
 }

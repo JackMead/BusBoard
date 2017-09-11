@@ -8,9 +8,9 @@ namespace BusBoard.ConsoleApp
 {
     class ArrivalInformation
     {
-        public string lineId;
-        public string lineName;
-        public int timeToStation;
+        public string LineId { get; set; }
+        public string LineName { get; set; }
+        public int TimeToStation { get; set; }
 
 
 
