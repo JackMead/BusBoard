@@ -9,6 +9,6 @@ namespace BusBoard.ConsoleApp
     class StopPoint
     {
         public string NaptanId { get; set; }
-        
+        public decimal Distance { get; set; }
     }
 }

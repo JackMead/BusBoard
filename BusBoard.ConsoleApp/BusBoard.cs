@@ -12,23 +12,34 @@ namespace BusBoard.ConsoleApp
     {
         public void Setup()
         {
-            promptUserForPostcode();
-            var stopID = "490008660N";
-            DisplayNextFiveArrivalsForStopId(stopID);
+            var postCode = PromptUserForPostcode();
 
-            var rawPostCodeContent = GetPostCodeInformation("NW1 0TL");
+            var rawPostCodeContent = GetPostCodeInformation(postCode);
             var postCodeInfo = JsonConvert.DeserializeObject<PostCodeResponse>(rawPostCodeContent).result;
-            Console.WriteLine(postCodeInfo.longitude);
-            Console.WriteLine(postCodeInfo.latitude);
             
-
             var stopPoints= GetStopPointsFromPostCodeInfo(postCodeInfo);
+            //TODO
+            //stopPoints = (StopPointsResponseWrapper) stopPoints.StopPoints.OrderBy(s => s.Distance);
             DisplayNextFiveArrivalsForStopId(stopPoints.StopPoints[0].NaptanId);
         }
 
-        private void promptUserForPostcode()
+        private string PromptUserForPostcode()
         {
-            
+            while (true)
+            {
+                Console.WriteLine("What postcode would you like to find buses for?");
+                var userPostCode = Console.ReadLine();
+                if (isValidPostcode(userPostCode))
+                {
+                    return userPostCode;
+                }
+                Console.WriteLine("Sorry, I didn't understand that");
+            }
+        }
+
+        private bool isValidPostcode(string userPostCode)
+        {
+            return true;
         }
 
         private void DisplayNextFiveArrivalsForStopId(string stopID)
