@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +17,22 @@ namespace BusBoard.ConsoleApp
 
             var client = new RestClient("https://api-radon.tfl.gov.uk");
 
-            var request = new RestRequest("StopPoint/490008660N/Arrivals", Method.GET);
+            var stopID = "490008660N";
+            var arrivalRequest= "StopPoint/" + stopID + "/Arrivals";
+            var request = new RestRequest( arrivalRequest, Method.GET);
             
             // execute the request
             IRestResponse response = client.Execute(request);
-            var content = response.Content; // raw content as string
-            Console.WriteLine(content);
+            var content = response.Content;
 
+            var allArrivals = JsonConvert.DeserializeObject<List<ArrivalInformation>>(content);
+
+            foreach(var arrival in allArrivals.OrderBy(a => a.timeToStation).Take(5))
+            {
+                Console.WriteLine(arrival.lineName + " " + arrival.timeToStation);
+            }
+
+            
         }
     }
 }
