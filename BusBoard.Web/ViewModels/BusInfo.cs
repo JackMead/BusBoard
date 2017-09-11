@@ -8,6 +8,10 @@ namespace BusBoard.Web.ViewModels
     {
         public BusInfo(BusFinder busFinder, string postCode)
         {
+            if (postCode == null)
+            {
+                postCode = "NW5 1TL";
+            }
             PostCode = postCode;
             var postCodeInfo = busFinder.GetPostCodeInformation(postCode);
 

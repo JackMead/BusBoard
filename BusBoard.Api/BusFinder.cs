@@ -46,8 +46,7 @@ namespace BusBoard.Api
         {
             var allArrivals = GetArrivalInformation(stopID);
 
-            //return allArrivals.OrderBy(a => a.TimeToStation).ToList();
-            return allArrivals;
+            return allArrivals.OrderBy(a => a.TimeToStation).ToList();
         }
 
         public StopPointsResponse GetStopPointsFromPostCodeInfo(PostCodeInformation postcode)

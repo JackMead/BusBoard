@@ -1,16 +1,51 @@
 ﻿@model BusBoard.Web.ViewModels.BusInfo
 @{
-  ViewBag.Title = "Bus Information";
+    ViewBag.Title = "Bus Information";
 }
 
+
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
 <h2>BusInfo</h2>
 
 <div class="row">
     <p>You entered postcode @Model.PostCode</p>
+
     <p>The closest stop point is : @Model.StopCode</p>
-    @foreach( var arrival in Model.AllArrivals)
-    {
-        @:<p> @arrival.LineName  </p>
-    }
+
+
+    <table style="width:100%">
+        <tr>
+            <th>LineName</th>
+            <th>ArrivalTime</th>
+        </tr>
+        @foreach (var arrival in Model.AllArrivals.Take(5))
+        {
+            @:
+            <tr>
+                <td>@arrival.LineName</td>
+                <td>@(arrival.TimeToStation/60) min</td>
+            </tr>
+        }
+
+    </table>
+
+
+
 
 </div>
