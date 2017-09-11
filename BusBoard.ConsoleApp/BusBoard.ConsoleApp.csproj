@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrivalInformation.cs" />
+    <Compile Include="PostCodeInformation.cs" />
+    <Compile Include="PostCodeResponse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
