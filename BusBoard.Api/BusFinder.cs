@@ -9,37 +9,13 @@ namespace BusBoard.Api
     {
         public void Setup()
         {
-            var postCode = PromptUserForPostcode();
-
+            var postCode = "NW51TL";
             var postCodeResponse = GetPostCodeInformation(postCode);
 
             var stopPoints = GetStopPointsFromPostCodeInfo(postCodeResponse.result);
             var listOfStopPointsByDistance = stopPoints.StopPoints.OrderBy(s => s.Distance).ToList();
             ReturnAllArrivalsForStopId(listOfStopPointsByDistance[0].NaptanId);
 
-        }
-
-        private string PromptUserForPostcode()
-        {
-            while (true)
-            {
-                Console.WriteLine("What postcode would you like to find buses for?");
-                var userPostCode = Console.ReadLine();
-                if (isValidPostcode(userPostCode))
-                {
-                    return userPostCode;
-                }
-                Console.WriteLine("Sorry, I didn't understand that");
-            }
-        }
-
-        private bool isValidPostcode(string userPostCode)
-        {
-            if (userPostCode == "")
-            {
-                return false;
-            }
-            return true;
         }
 
         public List<ArrivalInformation> ReturnAllArrivalsForStopId(string stopID)
