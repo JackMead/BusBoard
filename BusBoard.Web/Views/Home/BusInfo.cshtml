@@ -39,9 +39,14 @@
             @:
             <tr>
                 <td>@arrival.LineName</td>
-                <td>@(arrival.TimeToStation/60) min</td>
+                <td>@(arrival.TimeToStation / 60) min</td>
             </tr>
         }
+        @if (Model.AllArrivals.Count() == 0)
+        {
+            <tr><td>No results found for that postcode. No buses nearby</td></tr>
+        }
+
 
     </table>
 

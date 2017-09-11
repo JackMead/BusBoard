@@ -1,12 +1,15 @@
 ﻿using System.Web.Mvc;
 using BusBoard.Web.Models;
 using BusBoard.Web.ViewModels;
+using BusBoard.Api;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace BusBoard.Web.Controllers
 {
     public class HomeController : Controller
     {
-        
+
         public ActionResult Index()
         {
             return View();
@@ -15,11 +18,24 @@ namespace BusBoard.Web.Controllers
         [HttpGet]
         public ActionResult BusInfo(PostcodeSelection selection)
         {
-            // Add some properties to the BusInfo view model with the data you want to render on the page.
-            // Write code here to populate the view model with info from the APIs.
-            // Then modify the view (in Views/Home/BusInfo.cshtml) to render upcoming buses.
-            var busFinder = new Api.BusFinder();
-            var info = new BusInfo(busFinder, selection.Postcode);
+
+            var busFinder = new BusFinder();
+            var postCodeInfo = busFinder.GetPostCodeInformation(selection.Postcode);
+
+            var StopCode="";
+            var AllArrivals= new List<ArrivalInformation>();
+            if (postCodeInfo.result != null)
+            {
+                var allStopPoints = busFinder.GetStopPointsFromPostCodeInfo(postCodeInfo.result).StopPoints;
+                var listOfStopPointsByDistance = allStopPoints.OrderBy(s => s.Distance).ToList();
+                if (listOfStopPointsByDistance.Count != 0)
+                {
+                    StopCode = listOfStopPointsByDistance[0].NaptanId;
+                    AllArrivals = busFinder.ReturnAllArrivalsForStopId(StopCode);
+                }
+            }
+
+            var info = new BusInfo(selection.Postcode, StopCode, AllArrivals);
             return View(info);
         }
 

@@ -6,20 +6,12 @@ namespace BusBoard.Web.ViewModels
 {
     public class BusInfo
     {
-        public BusInfo(BusFinder busFinder, string postCode)
+        public BusInfo(string postCode, string StopCode, List<ArrivalInformation> AllArrivals)
         {
-            if (postCode == null)
-            {
-                postCode = "NW5 1TL";
-            }
-            PostCode = postCode;
-            var postCodeInfo = busFinder.GetPostCodeInformation(postCode);
+            this.PostCode = PostCode;
+            this.StopCode = StopCode;
+            this.AllArrivals = AllArrivals;
 
-            var allStopPoints = busFinder.GetStopPointsFromPostCodeInfo(postCodeInfo.result).StopPoints;
-            var listOfStopPointsByDistance = allStopPoints.OrderBy(s => s.Distance).ToList();
-            StopCode = listOfStopPointsByDistance[0].NaptanId;
-
-            AllArrivals = busFinder.ReturnAllArrivalsForStopId(StopCode);
         }
 
         public string PostCode { get; set; }
