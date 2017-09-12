@@ -6,7 +6,7 @@ namespace BusBoard.Web.ViewModels
 {
     public class BusInfo
     {
-        public BusInfo(string postCode, string StopCode, List<ArrivalInformation> AllArrivals)
+        public BusInfo(string PostCode, string StopCode, List<ArrivalInformation> AllArrivals)
         {
             this.PostCode = PostCode;
             this.StopCode = StopCode;
