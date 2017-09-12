@@ -4,84 +4,66 @@
 }
 
 
-    <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-
-        #map {
-                    height: 400px;
-                    width: 100%;
-                   
-        }
-    </style>
-
-    <h2>BusInfo</h2>
-
-    <div class="row">
-        <p>You entered postcode: @Model.PostCode</p>
-
-        <p>The closest stop point is: @Model.StopCodeName</p>
-
-                    <table style="width:100%">
-                <tr>
-                    <th>LineName</th>
-                    <th>ArrivalTime</th>
-                </tr>
-                @foreach (var arrival in Model.AllArrivals.Take(5))
-            {
-                    @:
-                    <tr>
-                        <td>@arrival.LineName</td>
-                        <td>@(arrival.TimeToStation / 60) min</td>
-                    </tr>
-                }
-                @if (Model.AllArrivals.Count() == 0)
-            {
-                    <tr><td>No results found for that postcode.</td></tr>
-                }
-
-
-            </table>
-
-
-
-    </div>
-<div id="map">
-    <p>Map should appear here...</p>
-</div>
-<script>
-
-    function initMap() {
-        var uluru = { lat: -25.363, lng: 131.044 };
-        var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 4,
-            center: uluru
-        });
-        var marker = new google.maps.Marker({
-            position: uluru,
-            map: map
-        });
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
     }
 
-</script>
-<script async defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCd1qOvCLCvc1pYe1UKVYNPXUyQlQrCvd0&callback=initMap">
-</script>
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+
+    #map {
+                height: 400px;
+                width: 100%;
+    }
+</style>
+
+<h2>BusInfo</h2>
+
+<div class="row">
+    <p>You entered postcode: @Model.PostCode</p>
+
+    <p>The closest stop point is: @Model.StopCodeName</p>
+
+    <table style="width:100%">
+        <tr>
+            <th>LineName</th>
+            <th>ArrivalTime</th>
+        </tr>
+        @foreach (var arrival in Model.AllArrivals.Take(5))
+            {
+            @:
+            <tr>
+                <td>@arrival.LineName</td>
+                <td>@(arrival.TimeToStation / 60) min</td>
+            </tr>
+        }
+        @if (Model.AllArrivals.Count() == 0)
+            {
+            <tr><td>No results found for that postcode.</td></tr>
+        }
+
+
+    </table>
+
+
+
+</div>
+<div id="map"></div>
+
 
 @section scripts{
-@Scripts.Render("~/bundles/webRefresher")
-
+    @Scripts.Render("~/bundles/webRefresher")
+    @Scripts.Render("~/bundles/googleMapsBusStop")
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCd1qOvCLCvc1pYe1UKVYNPXUyQlQrCvd0&callback=initMap">
+</script>
 }
