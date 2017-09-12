@@ -2,7 +2,7 @@
 {
   public class PostcodeSelection
   {
-    public string Postcode { get; set; }
-
+    public string OriginPostcode { get; set; }
+    public string DestinationPostcode { get; set; }
   }
 }

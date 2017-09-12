@@ -20,7 +20,7 @@ namespace BusBoard.Web.Controllers
         {
 
             var busFinder = new BusFinder();
-            var postCodeInfo = busFinder.GetPostCodeInformation(selection.Postcode);
+            var postCodeInfo = busFinder.GetPostCodeInformation(selection.OriginPostcode);
 
             var StopCodeName = "";
             var AllArrivals = new List<ArrivalInformation>();
@@ -47,8 +47,17 @@ namespace BusBoard.Web.Controllers
             }
 
             var planner = new JourneyPlanner();
-            planner.PlanFromPostCodes(selection.Postcode, "NW51TL");
-            var info = new BusInfo(selection.Postcode, StopCodeName, AllArrivals, latitude, longitude, planner);
+            if (selection.DestinationPostcode == null)
+            {
+
+                planner.PlanFromPostCodes(selection.OriginPostcode, "NW51TL");
+            }
+            else
+            {
+
+                planner.PlanFromPostCodes(selection.OriginPostcode, selection.DestinationPostcode);
+            }
+            var info = new BusInfo(selection.OriginPostcode, StopCodeName, AllArrivals, latitude, longitude, planner);
             return View(info);
         }
 

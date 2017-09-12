@@ -14,8 +14,10 @@
         {
         <fieldset>
             <legend>Post Code:</legend>
-            @Html.TextBoxFor(m => m.Postcode)
+            @Html.TextBoxFor(m => m.OriginPostcode)
 
+            <legend>Destination PostCode</legend>
+            @Html.TextBoxFor(m => m.DestinationPostcode)
             <input type="submit" value="Get Bus Info" />
         </fieldset>
         }
