@@ -29,6 +29,10 @@ namespace BusBoard.Web
 
             bundles.Add(new ScriptBundle("~/bundles/webRefresher").Include(
                 "~/Scripts/webRefresher.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/googleMapsBusStop").Include(
+                "~/Scripts/googleMapsBusStop.js"));
+
         }
     }
 }

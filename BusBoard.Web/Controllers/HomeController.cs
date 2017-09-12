@@ -22,7 +22,7 @@ namespace BusBoard.Web.Controllers
             var busFinder = new BusFinder();
             var postCodeInfo = busFinder.GetPostCodeInformation(selection.Postcode);
 
-            var StopCode="";
+            var StopCodeName="";
             var AllArrivals= new List<ArrivalInformation>();
             if (postCodeInfo.result != null)
             {
@@ -30,12 +30,13 @@ namespace BusBoard.Web.Controllers
                 var listOfStopPointsByDistance = allStopPoints.OrderBy(s => s.Distance).ToList();
                 if (listOfStopPointsByDistance.Count != 0)
                 {
-                    StopCode = listOfStopPointsByDistance[0].NaptanId;
-                    AllArrivals = busFinder.ReturnAllArrivalsForStopId(StopCode);
+                    StopCodeName = listOfStopPointsByDistance[0].CommonName;
+                    var StopCodeId = listOfStopPointsByDistance[0].NaptanId;
+                    AllArrivals = busFinder.ReturnAllArrivalsForStopId(StopCodeId);
                 }
             }
 
-            var info = new BusInfo(selection.Postcode, StopCode, AllArrivals);
+            var info = new BusInfo(selection.Postcode, StopCodeName, AllArrivals);
             return View(info);
         }
 
