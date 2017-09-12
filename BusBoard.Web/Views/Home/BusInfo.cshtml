@@ -53,8 +53,25 @@
         }
 
 
+
     </table>
 
+    <table>
+        <tr>
+            <th>Instruction</th>
+            <th>Duration</th>
+        </tr>
+
+        @foreach (var step in Model.Planner.JourneySteps)
+        {
+            @:
+            <tr>
+                <td>@step.Key</td>
+                <td>@step.Value</td>
+            </tr>
+        }
+
+    </table>
 
 
 </div>

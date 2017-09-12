@@ -12,18 +12,33 @@ namespace BusBoard.Api
     public class JourneyPlanner
     {
         public int Duration { get; set; }
-        public Dictionary<string, int> Steps { get; set; }
+        public Dictionary<string, int> JourneySteps { get; set; }
+
+        public JourneyPlanner()
+        {
+            JourneySteps = new Dictionary<string, int>{ };
+        }
 
         public void PlanFromPostCodes(string origin, string destination)
         {
             var client = new RestClient("https://api.tfl.gov.uk/journey/journeyresults");
             var request = new RestRequest(origin + "/to/"+destination, Method.GET);
             var jsonString = client.Execute(request).Content;
+            
+            var allJouneys = JObject.Parse(jsonString)["journeys"];
 
-            jsonString = @"{foo:'bar'}";
-            var obj = JsonConvert.DeserializeObject(jsonString);
-            //var url = (string)obj["journeys"];
-            //Duration = GetInformationFromJson(jsonString, "")
+            if(allJouneys!=null && allJouneys.Count() > 0)
+            {
+                var bestJourney = allJouneys[0];
+                Duration = (int)bestJourney["duration"];
+
+                foreach(var step in bestJourney["legs"])
+                {
+                    var summary = (string)step["instruction"]["summary"];
+                    var duration = (int)step["duration"];
+                    JourneySteps.Add(summary, duration);
+                }
+            }
 
         }
 

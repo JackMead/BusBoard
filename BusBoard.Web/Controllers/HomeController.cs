@@ -46,9 +46,9 @@ namespace BusBoard.Web.Controllers
                 }
             }
 
-            var info = new BusInfo(selection.Postcode, StopCodeName, AllArrivals, latitude, longitude);
             var planner = new JourneyPlanner();
-            planner.PlanFromPostCodes("w85al", "nw10tl");
+            planner.PlanFromPostCodes(selection.Postcode, "NW51TL");
+            var info = new BusInfo(selection.Postcode, StopCodeName, AllArrivals, latitude, longitude, planner);
             return View(info);
         }
 
