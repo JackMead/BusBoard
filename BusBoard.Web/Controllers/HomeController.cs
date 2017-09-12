@@ -24,6 +24,8 @@ namespace BusBoard.Web.Controllers
 
             var StopCodeName = "";
             var AllArrivals = new List<ArrivalInformation>();
+            decimal latitude = 0;
+            decimal longitude = 0;
 
             if (postCodeInfo.result != null)
             {
@@ -31,20 +33,23 @@ namespace BusBoard.Web.Controllers
                 var listOfStopPointsByDistance = allStopPoints.OrderBy(s => s.Distance).ToList();
                 if (listOfStopPointsByDistance.Count != 0)
                 {
-                    StopCodeName = listOfStopPointsByDistance[0].CommonName;
-                    var StopCodeId = listOfStopPointsByDistance[0].NaptanId;
-                    AllArrivals = busFinder.ReturnAllArrivalsForStopId(StopCodeId);
-
-
+                    var stopPoint = listOfStopPointsByDistance[0];
+                    StopCodeName = stopPoint.CommonName;
+                    AllArrivals = busFinder.ReturnAllArrivalsForStopId(stopPoint.NaptanId);
+                    latitude = stopPoint.Lat;
+                    longitude = stopPoint.Lon;
                 }
-                var info = new BusInfo(selection.Postcode, StopCodeName, AllArrivals, postCodeInfo.result.Latitude, postCodeInfo.result.Longitude);
-                return View(info);
+                else
+                {
+                    latitude = postCodeInfo.result.Latitude;
+                    longitude = postCodeInfo.result.Longitude;
+                }
             }
-            else
-            {
-                var info = new BusInfo(selection.Postcode, StopCodeName, AllArrivals, 0, 0);
-                return View(info);
-            }
+
+            var info = new BusInfo(selection.Postcode, StopCodeName, AllArrivals, latitude, longitude);
+            var planner = new JourneyPlanner();
+            planner.PlanFromPostCodes("w85al", "nw10tl");
+            return View(info);
         }
 
         public ActionResult About()

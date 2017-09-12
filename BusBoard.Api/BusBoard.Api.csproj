@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="ArrivalInformation.cs" />
     <Compile Include="BusFinder.cs" />
+    <Compile Include="JourneyPlanner.cs" />
     <Compile Include="PostCodeInformation.cs" />
     <Compile Include="PostCodeResponse.cs" />
     <Compile Include="Program.cs" />
