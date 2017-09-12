@@ -6,12 +6,13 @@ namespace BusBoard.Web.ViewModels
 {
     public class BusInfo
     {
-        public BusInfo(string PostCode, string StopCodeName, List<ArrivalInformation> AllArrivals)
+        public BusInfo(string PostCode, string StopCodeName, List<ArrivalInformation> AllArrivals, decimal Latitude, decimal Longitude)
         {
             this.PostCode = PostCode;
             this.StopCodeName = StopCodeName;
             this.AllArrivals = AllArrivals;
-
+            this.Latitude = Latitude;
+            this.Longitude = Longitude;
         }
 
         public string PostCode { get; set; }
@@ -20,6 +21,7 @@ namespace BusBoard.Web.ViewModels
 
         public List<ArrivalInformation> AllArrivals { get; set; }
 
-        public string StopCodeId { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
     }
 }
